@@ -1,16 +1,17 @@
-
+// read the path from argv 
 var fs = require('fs');
 var colors = require("colors");
 var arg = process.argv[2];
 var path = arg.toString() + '\\processed';
 var logPath = arg.toString() + '\\raw';
-var list = fs.readdirSync(logPath).sort();
+
 // Sort the files by name(year)
+var list = fs.readdirSync(logPath).sort();
 console.log(colors.green('sorting files...'));
 var length = list.length;
 var yearBase = list[0].slice(0,4);
 
-// read the path from argv and create the processed folder        
+// Create the processed folder if not exist
 console.log(path);
 if (!fs.existsSync(path))
 {
