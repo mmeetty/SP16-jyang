@@ -1,9 +1,10 @@
 // read the path from argv 
 var fs = require('fs');
+var path = require('path');
 var colors = require("colors");
 var arg = process.argv[2];
-var path = arg.toString() + '\\processed';
-var logPath = arg.toString() + '\\raw';
+var pathProcessed = path.join(arg.toString(), 'processed');
+var logPath = path.join(arg.toString(), 'raw');
 
 // Sort the files by name(year)
 //var list = fs.readdir(logPath).sort();
@@ -34,9 +35,9 @@ fs.readdir(logPath, function(err, result) {
     //console.log(yearList[0]);
 
     //make the processed folder
-    fs.exists(path, function(exists) {
-        if (!exists) {
-            fs.mkdir(path, function(err1) {
+    fs.stat(pathProcessed, function(err0, stats) {
+        if (err0) {
+            fs.mkdir(pathProcessed, function(err1) {
                 if (err1) {
                     return;
                 }
@@ -49,17 +50,17 @@ fs.readdir(logPath, function(err, result) {
                         yearList[yearListIndex] = year;
                         count[yearListIndex] = 0;
                     }
-                    for(var j = 0; j < yearList.length; j++) {
-                        if (year == yearList[j])
-                        {
+                    for (var j = 0; j < yearList.length; j++) {
+                        if (year == yearList[j]) {
                             count[j] += 1;
                         }
-                    }   
+                    }
                 }
 
                 for (i = 0; i < yearList.length; i++) {
-                    var yearFolder = path + '\\' + yearList[i];
+                    var yearFolder = path.join(pathProcessed, yearList[i]);
                     //console.log("Currently the folder path is " + yearFolder);
+
 
                     fs.mkdir(yearFolder, function(err2) {
                         if (err2) {
@@ -70,8 +71,8 @@ fs.readdir(logPath, function(err, result) {
                         for (i = 0; i < length; i++) {
                             var fileName = list[i];
                             var year = fileName.slice(0, 4);
-                            var oldPath = arg + '\\raw\\' + list[i];
-                            var newPath = path + '\\' + year + '\\' + list[i];
+                            var oldPath = path.join(arg, 'raw', list[i]);
+                            var newPath = path.join(pathProcessed, year, list[i]);
                             fs.rename(oldPath, newPath, function(err4) {
                                 if (err4) {
                                     //console.error(err4);
@@ -82,6 +83,7 @@ fs.readdir(logPath, function(err, result) {
                         }
 
                     });
+
                 }
                 // For each year's log, print a line
                 for (i = 0; i < yearList.length; i++) {
