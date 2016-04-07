@@ -1,7 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 
-var PORT = process.env.pirt || 3000;
+var PORT = process.env.port || 3000;
 
 function handleRequest(request, response) {
     if (request.url.indexOf("quotes") > -1) {
