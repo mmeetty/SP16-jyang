@@ -1,13 +1,14 @@
 var express = require('express');
 var app = express();
+var routes = require('./routes');
 
-app.get('/', function(req, res){
-   res.send('Hello Express');
-});
+app.set('view engine', 'ejs');
 
-app.get('/me', function(req, res){
-    res.send('something here');
-});
+app.locals.pagetitle = "Awesome Website";
+
+app.get('/', routes.index);
+app.get('/about', routes.about);
+
 
 app.get('/who/:name?', function(req, res){
     var name = req.params.name;
